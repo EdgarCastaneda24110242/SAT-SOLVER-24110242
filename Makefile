@@ -1,23 +1,33 @@
-CXX ?= g++
-CXXFLAGS ?= -std=c++17 -Wall -Wextra -pedantic
-TARGET = sat_solver
-SOURCE = main.cpp
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -DSAT_HAS_SFML
 
-.PHONY: all build run clean
+BINDIR = bin
 
-all: build
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(patsubst %.cpp,$(BINDIR)/%.o,$(SOURCES))
+TARGET = $(BINDIR)/sat_solver
 
-build: $(TARGET)
+.PHONY: all run SAT sat room clean
 
-$(TARGET): $(SOURCE)
-	$(CXX) $(CXXFLAGS) $(SOURCE) -o $(TARGET)
+all: $(BINDIR) $(TARGET)
 
-run: build
-ifeq ($(OS),Windows_NT)
-	cmd /c start "SAT Solver" $(TARGET).exe
-else
-	./$(TARGET)
-endif
+$(BINDIR):
+	mkdir -p $(BINDIR)
+
+$(BINDIR)/%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -lsfml-graphics -lsfml-window -lsfml-system
+
+run: all
+	$(TARGET)
+
+SAT:
+
+sat: run
+
+room: run
 
 clean:
-	-del /Q $(TARGET).exe 2>NUL || rm -f $(TARGET)
+	rm -rf $(BINDIR)
