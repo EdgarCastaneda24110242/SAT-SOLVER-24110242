@@ -1,3 +1,5 @@
+﻿#include "SatApplication.hpp"
+
 #include <algorithm>
 #include <cctype>
 #include <cmath>
@@ -123,7 +125,7 @@ public:
     void collectAtoms(std::set<std::string>& atoms) const override { child_->collectAtoms(atoms); }
 
     std::string print(int parentPrecedence = 0) const override {
-        const std::string text = "¬" + child_->print(4);
+        const std::string text = "Â¬" + child_->print(4);
         return 4 < parentPrecedence ? "(" + text + ")" : text;
     }
 
@@ -132,7 +134,7 @@ public:
         child_->printTree(prefix + (last ? "    " : "|   "), true);
     }
 
-    std::string graphLabel() const override { return "¬"; }
+    std::string graphLabel() const override { return "Â¬"; }
     std::vector<FormulaPtr> graphChildren() const override { return {child_}; }
 
 private:
@@ -189,10 +191,10 @@ private:
 
     static std::string symbolOf(FormulaTokenType type) {
         switch (type) {
-        case FormulaTokenType::And: return "∧";
-        case FormulaTokenType::Or: return "∨";
-        case FormulaTokenType::Implies: return "→";
-        case FormulaTokenType::Iff: return "↔";
+        case FormulaTokenType::And: return "âˆ§";
+        case FormulaTokenType::Or: return "âˆ¨";
+        case FormulaTokenType::Implies: return "â†’";
+        case FormulaTokenType::Iff: return "â†”";
         default: return "?";
         }
     }
@@ -797,7 +799,7 @@ static void showGraphic(Lexer& lexer) {
             phrasesButton.setPosition(sf::Vector2f(752.f, 120.f));
             phrasesButton.setFillColor(sf::Color(35, 91, 112));
             window.draw(phrasesButton);
-            drawText(window, font, "Librería de frases  v", 770.f, 130.f, 16, sf::Color::White);
+            drawText(window, font, "LibrerÃ­a de frases  v", 770.f, 130.f, 16, sf::Color::White);
             if (phrasesOpen) {
                 sf::RectangleShape menu(sf::Vector2f(520.f, static_cast<float>(phrases.size() * 38 + 8)));
                 menu.setPosition(sf::Vector2f(448.f, 174.f));
@@ -881,7 +883,7 @@ static void showGraphic(Lexer& lexer) {
 }
 #endif
 
-int main() {
+int runSatApplication() {
 #ifdef SAT_HAS_SFML
     Lexer lexer;
     showGraphic(lexer);
@@ -938,3 +940,4 @@ int main() {
     return 0;
 #endif
 }
+

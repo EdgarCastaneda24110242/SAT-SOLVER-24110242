@@ -1,10 +1,12 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -DSAT_HAS_SFML
+CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -Iinclude -DSAT_HAS_SFML
 
+SRCDIR = src
+INCDIR = include
 BINDIR = bin
 
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(patsubst %.cpp,$(BINDIR)/%.o,$(SOURCES))
+SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BINDIR)/%.o,$(SOURCES))
 TARGET = $(BINDIR)/sat_solver
 
 .PHONY: all run SAT sat room clean
@@ -14,7 +16,7 @@ all: $(BINDIR) $(TARGET)
 $(BINDIR):
 	mkdir -p $(BINDIR)
 
-$(BINDIR)/%.o: %.cpp
+$(BINDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJECTS)
@@ -30,4 +32,4 @@ sat: run
 room: run
 
 clean:
-	rm -rf $(BINDIR)
+	@if exist $(BINDIR) rmdir /S /Q $(BINDIR)
