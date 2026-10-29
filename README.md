@@ -1,47 +1,61 @@
 # SAT Solver
 
-## Dependencias
+Aplicación en C++17. SFML 3 es opcional: cuando está instalada se compila la interfaz gráfica; si no, se compila automáticamente la versión de consola.
 
-- C++17 y GNU Make.
-- SFML 3.x es opcional: si está disponible se abre la interfaz gráfica; si no, el Makefile compila automáticamente la versión de consola.
+## Vista de la aplicación
 
-En MSYS2 MinGW64:
+![SAT Solver](assets/sat-solver.png)
 
-```bash
-pacman -S mingw-w64-x86_64-sfml
-```
+![SAT Solver: análisis de frases](assets/sat-solver-result.png)
 
-En macOS:
+## Requisitos en Windows
 
-```bash
-xcode-select --install
-brew install sfml pkg-config
-```
+1. Instalar [MSYS2](https://www.msys2.org/).
+2. Abrir **MSYS2 MinGW 64-bit** y actualizar/instalar las herramientas:
 
-En Ubuntu/Linux:
+   ```bash
+   pacman -Syu
+   pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-sfml
+   ```
 
-```bash
-sudo apt install build-essential libsfml-dev pkg-config
-```
+3. Desde la raíz del proyecto, compilar y ejecutar:
 
-En macOS, el Makefile usa `pkg-config` y, como alternativa, `brew --prefix sfml`, por lo que funciona tanto en Apple Silicon como en Intel sin editar rutas.
-En Windows también intenta `pkg-config` y las bibliotecas estándar de SFML. Si no encuentra las cabeceras, usa consola automáticamente.
+   ```bash
+   make clean
+   make
+   ./build/sat_solver.exe
+   ```
 
-## Compilar y ejecutar
+   Si SFML no está disponible, el ejecutable funcionará en modo consola.
 
-Desde la raíz del proyecto:
+## Requisitos en macOS
 
-```bash
-make clean
-make run SAT
-```
+1. Instalar las herramientas de compilación y Homebrew:
 
-El ejecutable y los objetos se generan dentro de `build/`. Los datos y recursos se resuelven con rutas relativas a la raíz del proyecto.
+   ```bash
+   xcode-select --install
+   ```
 
-## Supuestos y riesgos no verificados
+   Si Homebrew no está instalado, hacerlo desde [brew.sh](https://brew.sh/).
+2. Instalar SFML y `pkg-config`:
 
-- No es posible ejecutar macOS desde este entorno; la compilación real debe verificarse en una Mac con SFML 3 instalada.
-- La ventana depende de que SFML 3 y sus DLL/dylib estén disponibles en el entorno de ejecución.
-- En Windows, la ejecución gráfica puede ser bloqueada por políticas del sistema aunque el proyecto compile correctamente.
-- El Makefile detecta SFML mediante una prueba de cabeceras; si una instalación tiene cabeceras incompletas o bibliotecas incompatibles, puede seleccionar consola.
-- La fuente y los datos se buscan con rutas relativas; `make run SAT` debe ejecutarse desde la raíz del proyecto.
+   ```bash
+   brew install sfml pkg-config
+   ```
+
+3. Desde la raíz del proyecto, compilar y ejecutar:
+
+   ```bash
+   make clean
+   make
+   ./build/sat_solver
+   ```
+
+## Permisos y notas
+
+- No se requieren permisos de administrador para compilar o ejecutar; basta con poder leer el proyecto y escribir en `build/`.
+- En macOS, si el sistema pregunta si se desea abrir una aplicación descargada, seleccionar **Abrir**. No es necesario otorgar permisos de Accesibilidad.
+- En Windows, si SmartScreen muestra una advertencia, verificar que el ejecutable provenga de este proyecto y seleccionar **Más información > Ejecutar de todas formas**.
+- Ejecutar los comandos desde la raíz del proyecto, porque `data/` y `assets/` se cargan mediante rutas relativas.
+- La interfaz gráfica requiere que las bibliotecas de SFML estén disponibles al ejecutar el programa. El Makefile cambia a consola automáticamente si no las encuentra.
+- Las frases no necesitan tener una coma perfecta: si el programa no puede identificar una relación lógica, conserva la frase completa como una proposición y continúa el análisis.

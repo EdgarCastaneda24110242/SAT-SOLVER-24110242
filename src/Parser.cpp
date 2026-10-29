@@ -120,8 +120,9 @@ FormulaPtr Parser::parseExpression(const std::string& text) {
             return binary(FormulaTokenType::Implies, value.substr(3, commaPosition - 3),
                           value.substr(consequenceStart));
         }
-        throw std::runtime_error(
-            "No pude separar la condicion de la consecuencia; prueba con una coma o con 'entonces'");
+        // Si falta un separador, se conserva la frase completa como una proposicion.
+        // Asi el analizador puede seguir trabajando con frases imperfectas.
+        return atom(value);
     }
     if (const auto split = findConnector(value, {" si y solo si ", " equivale a "}); split.has_value())
         return binary(FormulaTokenType::Iff, value.substr(0, split->first), value.substr(split->first + split->second.size()));

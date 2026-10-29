@@ -1,1 +1,4 @@
 p1	hoy es de di a , pors lo tanto ire a tranajr
+p2	si llueve es de noche
+p3	es de dia
+p4	es de noche
